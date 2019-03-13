@@ -10,8 +10,8 @@ import org.springframework.stereotype.Component;
 import java.math.BigDecimal;
 import java.util.List;
 
-@Component("daoh2")
-public class DAOH2 implements DAO {
+//@Component("daoh2")
+public class DAOH2 implements IDAO {
 
     //создание платежа
     @Override

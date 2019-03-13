@@ -8,7 +8,7 @@ import com.oxoo88oo.regularpayment.entities.Status;
 import java.math.BigDecimal;
 import java.util.List;
 
-public interface DAO {
+public interface IDAO {
 
     //создание платежа
     boolean createPayment(Payment payment) throws  ImpossibleException;
