@@ -1,43 +1,20 @@
-package com.oxoo88oo.regularpayment.DAO;
+package com.oxoo88oo.regularpayment.trash;
 
 import com.oxoo88oo.regularpayment.exceptions.ImpossibleException;
 import com.oxoo88oo.regularpayment.entities.Payment;
 import com.oxoo88oo.regularpayment.db.DBConnector;
 import com.oxoo88oo.regularpayment.entities.Provodka;
 import com.oxoo88oo.regularpayment.entities.Status;
+import com.oxoo88oo.regularpayment.trash.IDAO;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.util.List;
 
-//@Component("daoh2")
+@Component("daoh2")
 public class DAOH2 implements IDAO {
 
-    //создание платежа
-    @Override
-    public boolean createPayment(Payment payment) throws ImpossibleException {
 
-       return DBConnector.createPayment(payment);
-
-    }
-
-    //обновление платежа
-    @Override
-    public boolean updatePayment(Payment payment) {
-        return DBConnector.updatePayment(payment);
-    }
-
-    //нужно ли сделать проводку по платежу?
-    @Override
-    public boolean isNeedToPay(Long id) throws ImpossibleException {
-        return DBConnector.isNeededToPay(id);
-    }
-
-    //удалить платёж
-    @Override
-    public boolean deletePayment(long id) throws ImpossibleException {
-        return DBConnector.deletePayment(id);
-    }
 
     //инфо по платежу
     @Override
@@ -91,6 +68,11 @@ public class DAOH2 implements IDAO {
     }
 
     @Override
+    public Provodka getProvodkaByID(Long valueOf) throws ImpossibleException {
+        return null;
+    }
+
+    @Override
     public List<Payment> getAllPayments() throws ImpossibleException {
         return DBConnector.getAllPayments();
     }
@@ -107,8 +89,60 @@ public class DAOH2 implements IDAO {
     }
 
     @Override
-    public boolean createProvodka(Provodka provodka) throws ImpossibleException {
-        return DBConnector.createProvodka(provodka);
+    public boolean isNeedToPay(Long id) throws ImpossibleException {
+        return false;
+    }
+
+
+
+
+    @Override
+    public boolean stornirovkaProvodki(Long id)throws  ImpossibleException {
+        return DBConnector.stornirovkaProvodki(id);
+    }
+
+
+
+
+    @Override
+    public boolean create() throws ImpossibleException {
+        return DBConnector.create();
+    }
+
+    @Override
+    public boolean update() throws ImpossibleException {
+        return false;
+    }
+
+    @Override
+    public boolean delete() throws ImpossibleException {
+        return false;
+    }
+/*
+    //создание платежа
+    @Override
+    public boolean createPayment(Payment payment) throws ImpossibleException {
+
+        return DBConnector.createPayment(payment);
+
+    }
+
+    //обновление платежа
+    @Override
+    public boolean updatePayment(Payment payment) {
+        return DBConnector.updatePayment(payment);
+    }
+
+    //нужно ли сделать проводку по платежу?
+    @Override
+    public boolean isNeedToPay(Long id) throws ImpossibleException {
+        return DBConnector.isNeededToPay(id);
+    }
+
+    //удалить платёж
+    @Override
+    public boolean deletePayment(long id) throws ImpossibleException {
+        return DBConnector.deletePayment(id);
     }
 
     @Override
@@ -121,14 +155,11 @@ public class DAOH2 implements IDAO {
         return DBConnector.deleteProvodka(id);
     }
 
-    @Override
-    public Provodka getProvodkaByID(Long id)throws  ImpossibleException {
-        return DBConnector.getProvodkaByID(id);
-    }
 
     @Override
-    public boolean stornirovkaProvodki(Long id)throws  ImpossibleException {
-        return DBConnector.stornirovkaProvodki(id);
+    public boolean createProvodka(Provodka provodka) throws ImpossibleException {
+        return DBConnector.createProvodka(provodka);
     }
 
+    */
 }

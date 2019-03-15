@@ -16,7 +16,7 @@
 
 
     <properties>
-        <java.version>1.11</java.version>
+        <java.version>1.8</java.version>
     </properties>
 
     <dependencies>
@@ -45,7 +45,6 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.6</version>
             <scope>provided</scope>
         </dependency>
 
@@ -55,7 +54,6 @@
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
-            <version>1.4.197</version>
         </dependency>
     </dependencies>
 

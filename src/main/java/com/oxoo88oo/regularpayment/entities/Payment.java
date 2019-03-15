@@ -6,8 +6,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 @Data
-public class Payment {
-    private long id;
+public class  Payment extends Entity {
     private String nameOfSender;
     private long INNofSender;
     private long NumberOfCardOfSender;

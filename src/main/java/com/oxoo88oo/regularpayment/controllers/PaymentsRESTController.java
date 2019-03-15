@@ -1,8 +1,14 @@
 package com.oxoo88oo.regularpayment.controllers;
 
+
 import com.oxoo88oo.regularpayment.exceptions.ImpossibleException;
 import com.oxoo88oo.regularpayment.entities.Payment;
 import com.oxoo88oo.regularpayment.entities.Provodka;
+import com.oxoo88oo.regularpayment.trash.DAOPayments;
+import com.oxoo88oo.regularpayment.trash.DAOProvodki;
+import com.oxoo88oo.regularpayment.trash.IDAOPayment;
+import com.oxoo88oo.regularpayment.trash.IDAOProvodki;
+import com.oxoo88oo.regularpayment.validation.IValidation;
 import com.oxoo88oo.regularpayment.validation.Validation;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,7 +16,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 
-@RestController("/")
+@RestController
 public class PaymentsRESTController {
 
 /* Методы CRUD платежей
@@ -20,34 +26,46 @@ Create Update Delete
 Метод получения списка платежей по Получателю (ОКПО) */
 
 
+    private IDAOPayment daoPayments = new DAOPayments();
+    private IDAOProvodki daoProvodki = new DAOProvodki();
+
+    private IValidation validation = new Validation();
+
+
     //создание платежа
     @PostMapping("/payment/create")
     public boolean createPayment(@RequestBody Payment payment)throws ImpossibleException{
 
-           return Validation.createPayment(payment);
+           if(!validation.createPayment(payment)) throw new ImpossibleException("");
 
-        //return true;
+          return daoPayments.create(payment);
+
     }
 
     //todo
     //обновление платежа
     @PutMapping("/payment/update/{payment}")
     public boolean updatePayment(@PathVariable("payment") Payment payment) throws ImpossibleException {
-        return Validation.updatePayment(payment);
+        if(!validation.updatePayment(payment)) throw new ImpossibleException("");
+
+        return daoPayments.update(payment);
+
     }
 
     //удаление платежа
     // curl -X DELETE localhost:8080/payment/delete/1
     @DeleteMapping("/payment/delete/{id}")
     public boolean deletePayment(@PathVariable("id") String id)throws ImpossibleException{
-        return Validation.deletePaymentByID(id);
 
+        if(!validation.deletePaymentByID(id)) throw new ImpossibleException("");
+
+        return daoPayments.delete(Long.parseLong(id));
     }
 
     //инфо о платеже по айди
     @GetMapping("/payment/info/{id}")
     public Payment getPaymentInfo(@PathVariable String id) throws ImpossibleException {
-        return Validation.getPaymentInfo(id);
+        return daoPayments.getPaymentInfo(Long.parseLong(id));
     }
 
 

@@ -1,5 +1,7 @@
 package com.oxoo88oo.regularpayment.db;
 
+import com.oxoo88oo.regularpayment.DAO.DAOPayment;
+import com.oxoo88oo.regularpayment.DAO.DAOProvodki;
 import com.oxoo88oo.regularpayment.entities.Payment;
 import com.oxoo88oo.regularpayment.entities.Provodka;
 import com.oxoo88oo.regularpayment.entities.Status;
@@ -13,60 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class DBConnector {
-
-    private final static String createPaymentTableQuery = "CREATE TABLE IF NOT EXISTS PAYMENTS(id BIGINT auto_increment, nameOfSender VARCHAR(25) ," +
-            " inn_of_sender BIGINT, namber_of_card_of_sender BIGINT, accaun_of_receiver BIGINT, MFO_OF_RECEIVER BIGINT," +
-            "okpo_of_receiver BIGINT, name_of_receiver varchar(25), period BIGINT, count DECIMAL)";
-    private final static String createProvodkiTableQuery =
-            "CREATE TABLE IF NOT EXISTS PROVODKI(id INT auto_increment, id_of_payment INT," +
-                    " time BIGINT, count DECIMAL , status varchar(15))";
-    private final static String createMoneyOfSendersTableQuery =
-            "CREATE TABLE IF NOT EXISTS MONEY_OF_SENDERS(id int auto_increment, inn BIGINT, count DECIMAL )";
-    private final static String createMoneyOfReceiversTableQuery =
-            "CREATE TABLE IF NOT EXISTS MONEY_OF_RECEIVERS(id int auto_increment, accaunt_of_receiver BIGINT, count DECIMAL )";
-
-    private static final String getProvodkaByIDQuery =
-            "SELECT * FROM PROVODKI WHERE ID = ?";
-    private final static String getAllPaymentsByINNQuery =
-            "SELECT * FROM PAYMENTS WHERE inn_of_sender = ?";
-    private final static String getAllPaymentsByOKPOQuery =
-            "SELECT * FROM PAYMENTS WHERE okpo_of_receiver = ?";
-    private final static String getAllReceiverPaymentsByAccauntQuery =
-            "SELECT * FROM PAYMENTS WHERE accaun_of_receiver = ?";
-    private final static String getAllPaymentsQuery =
-            "SELECT * FROM PAYMENTS";
-    private final static String getAllProvodkaByPaymentIDQuery =
-            "SELECT * FROM PROVODKI WHERE id_of_payment = ?";
-    private final static String getAllProvodkiQuery =
-            "SELECT * FROM PROVODKI";
-    private final static String getPaymentByIdQuery = "SELECT * FROM PAYMENTS WHERE id = ?";
-
-    private final static String insertIntoPayments =
-            "INSERT INTO PAYMENTS (nameOfSender, inn_of_sender , namber_of_card_of_sender," +
-                    " accaun_of_receiver, mfo_of_receiver, okpo_of_receiver, name_of_receiver," +
-                    " period, count) values (?,?,?,?,?,?,?,?,?)";
-    private final static String insertIntoProvodki =
-            "INSERT INTO PROVODKI(id_of_payment, time, count, status) values(?,?,?,?)";
-
-    private static final String updatePaymentQuery =
-            "UPDATE PAYMENTS SET nameOfSender = ?, inn_of_sender = ?," +
-                    " namber_of_card_of_sender = ?, accaun_of_receiver = ?," +
-                    " MFO_OF_RECEIVER = ?, okpo_of_receiver = ?," +
-                    " name_of_receiver = ?, period = ?," +
-                    " count = ? WHERE id = ?";
-
-    private static  final String updateProvodkaQuery =
-            "UPDATE PROVODKI SET id_of_payment = ?, time = ?, count =?," +
-                    " status = ? WHERE id = ?";
-    private static final String updateStatusProvodkaQuery =
-            "UPDATE PROVODKI SET status = ? WHERE id = ?";
-
-    private static final String deleteProvodkaQuery = "DELETE FROM PROVODKI WHERE id = ?";
-    private final static String deletePaymentQuery = "DELETE FROM PAYMENTS WHERE ID = ?";
-
-    private final static String isNeedToPayQuery = "";
-    private final static String dropAllTablesQuery = "DROP ALL OBJECTS";
-    private final static String getAllLastProvodkiByPaymentsQuery = "SELECT * FROM PROVODKI";
 
     private static Logger logger = LoggerFactory.getLogger(DBConnector.class);
 
@@ -93,15 +41,7 @@ public abstract class DBConnector {
         try (Connection conn =  DriverManager.getConnection("jdbc:h2:~/db/payments", "sa", "");
              PreparedStatement ps = conn.prepareStatement(insertIntoPayments)){
 
-        ps.setString(1, payment.getNameOfSender());
-        ps.setLong(2, payment.getINNofSender());
-        ps.setLong(3, payment.getNumberOfCardOfSender());
-        ps.setLong(4, payment.getAccauntOfReceiver());
-        ps.setLong(5, payment.getMFOofReceiver());
-        ps.setLong(6, payment.getOKPOofReceiver());
-        ps.setString(7, payment.getNameOfReceiver());
-        ps.setLong(8, payment.getPeriod());
-        ps.setString(9, payment.getCount().toString());
+            DAOPayment.setPayment(payment, ps);
 
         }catch (SQLException e){
             e.printStackTrace();
@@ -110,22 +50,37 @@ public abstract class DBConnector {
         return true;
     }
 
+    public static boolean createProvodka(Provodka provodka) throws ImpossibleException{
+        try (Connection conn =  DriverManager.getConnection("jdbc:h2:~/db/payments", "sa", "");
+             PreparedStatement ps = conn.prepareStatement(insertIntoProvodki)) {
+
+
+            ps.setLong(1, provodka.getIdOfPayment());
+            ps.setLong(2, System.currentTimeMillis());
+            ps.setBigDecimal(3, provodka.getCount());
+            ps.setString(4, provodka.getStatus().toString());
+            ps.addBatch();
+
+            ps.executeUpdate();
+
+        }catch (SQLException e){
+            e.printStackTrace();
+            throw new ImpossibleException(dbError);
+        }
+        return true;
+
+    }
+
+
+    public static boolean create(){
+
+        return true;
+    }
     public static boolean updatePayment(Payment payment) {
         try (Connection conn =  DriverManager.getConnection("jdbc:h2:~/db/payments", "sa", "");
              PreparedStatement ps = conn.prepareStatement(updatePaymentQuery)){
 
-        ps.setString(1, payment.getNameOfSender());
-        ps.setLong(2, payment.getINNofSender());
-        ps.setLong(3, payment.getNumberOfCardOfSender());
-        ps.setLong(4, payment.getAccauntOfReceiver());
-        ps.setLong(5, payment.getMFOofReceiver());
-        ps.setLong(6, payment.getOKPOofReceiver());
-        ps.setString(7, payment.getNameOfReceiver());
-        ps.setLong(8, payment.getPeriod());
-        ps.setString(9, payment.getCount().toString());
-        ps.setLong(10, payment.getId());
-
-            return true;
+            return tmp(payment, ps);
         }catch (SQLException e){
             e.printStackTrace();
             return false;
@@ -496,39 +451,14 @@ public abstract class DBConnector {
     }
 
 
-    public static boolean createProvodka(Provodka provodka) throws ImpossibleException{
-        try (Connection conn =  DriverManager.getConnection("jdbc:h2:~/db/payments", "sa", "");
-             PreparedStatement ps = conn.prepareStatement(insertIntoProvodki)) {
 
-
-                ps.setLong(1, provodka.getIdOfPayment());
-                ps.setLong(2, System.currentTimeMillis());
-                ps.setBigDecimal(3, provodka.getCount());
-                ps.setString(4, provodka.getStatus().toString());
-                ps.addBatch();
-
-            ps.executeUpdate();
-
-        }catch (SQLException e){
-            e.printStackTrace();
-            throw new ImpossibleException(dbError);
-        }
-        return true;
-
-    }
 
     public static boolean updateProvodka(Provodka provodka)throws ImpossibleException {
         try (Connection conn =  DriverManager.getConnection("jdbc:h2:~/db/payments", "sa", "");
              PreparedStatement ps = conn.prepareStatement(updateProvodkaQuery)) {
 
 
-            ps.setLong(1, provodka.getIdOfPayment());
-            ps.setLong(2, System.currentTimeMillis());
-            ps.setBigDecimal(3, provodka.getCount());
-            ps.setString(4, provodka.getStatus().toString());
-            ps.setLong(5, provodka.getId());
-
-            ps.executeUpdate();
+            DAOProvodki.setProvodka(provodka, ps);
 
         }catch (SQLException e){
             e.printStackTrace();

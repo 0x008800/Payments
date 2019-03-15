@@ -5,8 +5,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 @Data
-public class Provodka {
-    private long id;
+public class Provodka extends Entity {
     private long idOfPayment;
     private long time;
     private BigDecimal count;

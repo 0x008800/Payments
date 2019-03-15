@@ -1,152 +1,167 @@
 package com.oxoo88oo.regularpayment.validation;
 
-import com.oxoo88oo.regularpayment.DAO.DAOH2;
 import com.oxoo88oo.regularpayment.exceptions.ImpossibleException;
 import com.oxoo88oo.regularpayment.entities.Payment;
-import com.oxoo88oo.regularpayment.DAO.IDAO;
 import com.oxoo88oo.regularpayment.entities.Provodka;
-import com.oxoo88oo.regularpayment.entities.Status;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-
-import java.math.BigDecimal;
-import java.util.List;
 
 //валидация входящих данных
-public abstract class Validation {
+public class Validation implements IValidation{
 
-   // @Autowired
-   // @Qualifier("daoh2")
-    public static IDAO dao = new DAOH2();
+
 
     //создание платежа
-    public static boolean createPayment(Payment payment) throws ImpossibleException {
-        if(Helper.isValidPayment(payment)){
-            return dao.createPayment(payment);
+    public  boolean createPayment(Payment payment) throws ImpossibleException {
+        if(isValidPayment(payment)){
+            return true;
+
         }else throw new ImpossibleException("invalid payment");
 
     }
 
     //обновление платежа
-    public static boolean updatePayment(Payment payment) throws ImpossibleException {
-        if(Helper.isValidPayment(payment)){
-            return dao.updatePayment(payment);
-        }else throw new ImpossibleException("invalid payment");
-    }
+    public  boolean updatePayment(Payment payment) throws ImpossibleException {
+        if(isValidPayment(payment)){
+            return true;
+
+        }else throw new ImpossibleException("invalid payment");    }
 
     //инфо по платежу
-    public static Payment getPaymentInfo(String id) throws ImpossibleException {
-        if(Helper.isValidLong(id)){
-            return dao.getPaymentInfo(Long.parseLong(id));
+    public boolean getPaymentInfo(String id) throws ImpossibleException {
+        if(isValidLong(id)){
+            return true;
         }else throw new ImpossibleException("id is wrong");
     }
 
     //оплатить, сделать проводку
-    public static boolean usePayment(String id) throws ImpossibleException {
+    public  boolean usePayment(String id) throws ImpossibleException {
 
-        //todo
-        BigDecimal count = new BigDecimal(100);
-        Status status = Status.ACTIVE;
+//        //todo
+//        BigDecimal count = new BigDecimal(100);
+//        Status status = Status.ACTIVE;
 
-        //нужно ли проверять на необходимость проводки или это отдельн метод?
-        if(Helper.isValidLong(id) && dao.isNeedToPay(Long.parseLong(id))) {
-            return dao.usePayment(Long.parseLong(id), count, status);
-        }else {
-            //либо айди либо не нуждается в проводке
-            throw new ImpossibleException("impossible");
-        }
+//        if(dao.isNeedToPay(Long.parseLong(id))) {
+//            return dao.usePayment(Long.parseLong(id), count, status);
+//        }else {
+//            return false;
+//        }
+
+        if(isValidLong(id)){
+            return true;
+        }else throw new ImpossibleException("");
     }
 
     //удалить платёж
-    public static boolean deletePaymentByID(String id)throws ImpossibleException{
+    public  boolean deletePaymentByID(String id)throws ImpossibleException{
 
-        if(Helper.isValidLong(id)) {
-            return dao.deletePayment(Long.parseLong(id));
-        } else  {
-            throw new ImpossibleException("wrong id");
-        }
+        if(isValidLong(id)){
+            return true;
+        }else throw new ImpossibleException("");
     }
 
+
     //получить все платежи по инн отправителя
-    public static List<Payment> getPaymentsInfoByINN(String inn) throws ImpossibleException {
-        if(Helper.isValidLong(inn)){
-            return dao.getAllPaymentsByINN(Long.valueOf(inn));
-        }else throw new ImpossibleException("inn is wrong");
+    public boolean getPaymentsInfoByINN(String inn) throws ImpossibleException {
+        if(isValidLong(inn)){
+            return true;
+        }else throw new ImpossibleException("");
+
     }
 
     //получить все платежи по окпо получателя
-    public static List<Payment> getPaymentsInfoByOKPO(String okpo) throws ImpossibleException {
-        if(Helper.isValidLong(okpo)){
-            return dao.getAllPaymentsByOKPO(Long.valueOf(okpo));
-        }else throw new ImpossibleException("okpo is wrong");
+    public boolean getPaymentsInfoByOKPO(String okpo) throws ImpossibleException {
+        if(isValidLong(okpo)){
+            return true;
+        }else throw new ImpossibleException("");
+
     }
 
-    //получить все платежи получателя по аккаунту
-    public static List<Payment> getAllReceiverPaymentsByAccaunt(String acc) throws ImpossibleException {
-        if(Helper.isValidLong(acc)){
-            return  dao.getAllReceiverPaymentsByAccaunt(Long.valueOf(acc));
-        }else throw new ImpossibleException("acc is wrong");
+//    //создать все таблицы
+//    public  boolean createAllTables() throws ImpossibleException {
+//        return dao.createAllTables();
+//    }
+//
+//    //удалить все табл
+//    public  boolean dropAllTables() throws ImpossibleException {
+//        return dao.dropAllTables();
+//
+//    }
+
+    public boolean getAllReceiverPaymentsByAccaunt(String accaunOfReceiver) throws ImpossibleException {
+        if(isValidLong(accaunOfReceiver)){
+            return true;
+        }else throw new ImpossibleException("");
     }
 
-    //получить список проводок по платежу
-    public static List<Provodka> getInfoByProvodkiOfPayment(String id) throws ImpossibleException {
+    public boolean getInfoByProvodkiOfPayment(String id) throws ImpossibleException {
 
-        if(Helper.isValidLong(id)){
-            return dao.getInfoByProvodkiOfPayment(Long.parseLong(id));
-        }else throw new ImpossibleException("id is wrong");
+        if(isValidLong(id)){
+            return true;
+        }else throw new ImpossibleException("");
     }
 
 
-    //создать проводку
-    public static boolean createProvodka(Provodka provodka) throws ImpossibleException{
-        if (Helper.isValidProvodka(provodka)){
-            return dao.createProvodka(provodka);
-        }else throw new ImpossibleException("invalid provodka");
+    public  boolean createProvodka(Provodka provodka) throws ImpossibleException{
+        if(isValidProvodka(provodka)){
+            return true;
+        }else throw new ImpossibleException("");
     }
 
-    //обновить проводку
-    public static boolean updateProvodka(Provodka provodka) throws ImpossibleException {
-        if (Helper.isValidProvodka(provodka)){
-            return dao.updateProvodka(provodka);
-        }else throw new ImpossibleException("invalid provodka");
+
+
+    public  boolean updateProvodka(Provodka provodka) throws ImpossibleException {
+        if(isValidProvodka(provodka)){
+            return true;
+        }else throw new ImpossibleException("");
     }
 
-    //удаление проводки
-    public static boolean deleteProvodka(String id) throws ImpossibleException {
-        if (Helper.isValidLong(id)){
-            return dao.deleteProvodka(Long.parseLong(id));
-        }throw new ImpossibleException("id is wrong");
+    public  boolean deleteProvodka(String id) throws ImpossibleException {
+        if(isValidLong(id)){
+            return true;
+        }else throw new ImpossibleException("");
     }
 
-    //получение проводки по айди
-    public static Provodka getProvodkaByID(String id) throws ImpossibleException {
-        if (Helper.isValidLong(id)){
-            return dao.getProvodkaByID(Long.parseLong(id));
-        }else throw new ImpossibleException("id is wrong");
+    public boolean getProvodkaByID(String id) throws ImpossibleException {
+        if(isValidLong(id)){
+            return true;
+        }else throw new ImpossibleException("");
     }
 
-    //сторнировка проводки
-    public static boolean stornirovkaProvodki(String id) throws ImpossibleException {
-        if (Helper.isValidLong(id)){
-            return dao.stornirovkaProvodki(Long.parseLong(id));
-        }else throw new ImpossibleException("id is wrong");
+    public  boolean stornirovkaProvodki(String id) throws ImpossibleException {
+        if(isValidLong(id)){
+            return true;
+        }else throw new ImpossibleException("");     }
+
+    public  boolean isNeedToPay(String id) throws ImpossibleException {
+        if(isValidLong(id)){
+            return true;
+        }else throw new ImpossibleException("");     }
+
+
+     boolean isValidPayment(Payment payment) {
+        return payment != null &&
+                payment.getId() == 0 &&
+                !payment.getNameOfSender().equals("") &&
+                payment.getNumberOfCardOfSender() > 0 &&
+                payment.getINNofSender() > 0 &&
+                !payment.getNameOfReceiver().equals("") &&
+                payment.getMFOofReceiver() > 0 &&
+                payment.getOKPOofReceiver() > 0 &&
+                payment.getPeriod() % 60_000 == 0 &&
+                payment.getCount() != null;
     }
 
-    //нуждается ли платёж в проводке
-    public static boolean isNeedToPay(String id) throws ImpossibleException {
-        if (Helper.isValidLong(id)){
-            return dao.isNeedToPay(Long.valueOf(id));
-        }throw new ImpossibleException("id is wrong");
+    static boolean isValidLong(String id) {
+        long l;
+        try {
+            l = Long.parseLong(id);
+        }catch (NumberFormatException e){
+            e.printStackTrace();
+            return false;
+        }
+        return l > 0;
     }
 
-    //создать все таблицы
-    public static boolean createAllTables() throws ImpossibleException {
-        return dao.createAllTables();
-    }
-
-    //удалить все табл
-    public static boolean dropAllTables() throws ImpossibleException {
-        return dao.dropAllTables();
-
+    private boolean isValidProvodka(Provodka provodka) {
+        return true;
     }
 }

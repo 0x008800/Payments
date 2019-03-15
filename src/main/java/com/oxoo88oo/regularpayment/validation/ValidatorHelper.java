@@ -1,11 +1,10 @@
 package com.oxoo88oo.regularpayment.validation;
 
 import com.oxoo88oo.regularpayment.entities.Payment;
-import com.oxoo88oo.regularpayment.entities.Provodka;
 
 import java.math.BigDecimal;
 
-class Helper {
+class ValidatorHelper {
 
     static boolean isValidPayment(Payment payment) {
         return payment != null &&
@@ -29,14 +28,5 @@ class Helper {
             return false;
         }
         return l > 0;
-    }
-
-    public static boolean isValidProvodka(Provodka provodka) {
-        return provodka != null &&
-                provodka.getId() == 0 &&
-                provodka.getIdOfPayment() > 0 &&
-                provodka.getTime() >= System.currentTimeMillis() &&
-                provodka.getCount() != null &&
-                provodka.getStatus() != null;
     }
 }
