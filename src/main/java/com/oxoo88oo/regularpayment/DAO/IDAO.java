@@ -1,20 +1,24 @@
 package com.oxoo88oo.regularpayment.DAO;
 
+import com.oxoo88oo.regularpayment.entities.Entity;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
-public interface IDAO<T> {
+public interface IDAO<E extends Entity> {
 
-    boolean insert(T entity)throws SQLException;
-    boolean update(T entity) throws SQLException;
+    boolean insert(E entity)throws SQLException;
+    boolean update(E entity) throws SQLException;
 
     boolean delete(long id) throws  SQLException;
 
     Connection getConnection() throws SQLException;
     String getTable();
 
-   T getByID(long id) throws SQLException;
+   E getByID(long id) throws SQLException;
 
-   List<T> getAll()throws SQLException;
+   List<E> getByColumn(long id, long column)throws SQLException;
+
+   List<E> getAll()throws SQLException;
 }

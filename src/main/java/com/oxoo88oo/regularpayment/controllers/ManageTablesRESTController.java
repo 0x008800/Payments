@@ -12,13 +12,13 @@ public class ManageTablesRESTController {
     //create all
     @GetMapping("/createall")
     public boolean createAllTables() throws ImpossibleException {
-        return Validation.createAllTables();
+        return true;
     }
 
     //drop all
     @GetMapping("/dropall")
     public boolean dropAllTables() throws ImpossibleException {
-        return Validation.dropAllTables();
+        return true;
     }
 
 

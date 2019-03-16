@@ -10,8 +10,8 @@ import java.util.List;
 
 public class DAOPayment extends DAOParent<Payment> {
 
-    protected DAOPayment() throws SQLException {
-        this.table = "PAYMENT";
+    public DAOPayment() throws SQLException {
+        this.table = "PAYMENTS";
     }
 
     @Override
@@ -25,8 +25,8 @@ public class DAOPayment extends DAOParent<Payment> {
 
 
     @Override
-    public boolean update(Payment o) throws SQLException {
-        Payment payment = (Payment) o;
+    public boolean update(Payment payment) throws SQLException {
+
         try (PreparedStatement ps = connection.prepareStatement(WorkWithTables.updatePaymentQuery)){
 
             setPayment(payment, ps);
@@ -34,9 +34,8 @@ public class DAOPayment extends DAOParent<Payment> {
             return true;
     }
 
-
-
-    public List<Payment> getPaymentsByColumn(String column) throws SQLException {
+    @Override
+    public List<Payment> getByColumn(long id, long column) throws SQLException {
         List<Payment> list;
         try(PreparedStatement ps = connection.prepareStatement(String.format(getWhereQuery, getTable(), column))){
 

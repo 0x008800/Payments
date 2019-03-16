@@ -1,11 +1,13 @@
 package com.oxoo88oo.regularpayment.DAO;
 
+import com.oxoo88oo.regularpayment.entities.Entity;
+
 import java.sql.*;
 import java.util.List;
 
-public abstract class DAOParent<T> extends WorkWithTables implements IDAO<T>{
+public abstract class DAOParent<E extends Entity> extends WorkWithTables implements IDAO<E>{
 
-    public abstract List<T> parseResultSet(ResultSet rs) throws SQLException;
+    public abstract List<E> parseResultSet(ResultSet rs) throws SQLException;
 
     @Override
     public String getTable() {
@@ -35,9 +37,9 @@ public abstract class DAOParent<T> extends WorkWithTables implements IDAO<T>{
     }
 
     @Override
-    public T getByID(long id)throws SQLException{
-        List<T> list;
-        try (PreparedStatement ps = connection.prepareStatement(String.format(getByIdQuery, getTable()))) {
+    public E getByID(long id)throws SQLException{
+        List<E> list;
+        try (PreparedStatement ps = connection.prepareStatement(String.format(getByIdQuery, getTable(), id))) {
 
             ps.setLong(1, id);
             ResultSet rs = ps.executeQuery();
@@ -50,8 +52,8 @@ public abstract class DAOParent<T> extends WorkWithTables implements IDAO<T>{
     }
 
     @Override
-    public List<T> getAll()throws SQLException{
-        List<T> list;
+    public List<E> getAll()throws SQLException{
+        List<E> list;
         try(PreparedStatement ps = connection.prepareStatement(String.format(getAllQuery, getTable()))){
             ResultSet rs = ps.executeQuery();
 

@@ -12,7 +12,7 @@ public class DAOProvodki extends DAOParent<Provodka> {
 
 
 
-    protected DAOProvodki() throws SQLException {
+    public DAOProvodki() throws SQLException {
         this.table = "PROVODKI";
     }
 
@@ -33,6 +33,10 @@ public class DAOProvodki extends DAOParent<Provodka> {
         return true;
     }
 
+    @Override
+    public List<Provodka> getByColumn(long id, long column) throws SQLException {
+        return null;
+    }
 
 
     public long stornirovka(long id)throws SQLException{
@@ -61,6 +65,7 @@ public class DAOProvodki extends DAOParent<Provodka> {
 
 
 
+
     public List<Provodka> parseResultSet(ResultSet rs)throws SQLException {
 
         Provodka provodka;
@@ -74,6 +79,7 @@ public class DAOProvodki extends DAOParent<Provodka> {
                 provodka.setCount(rs.getBigDecimal(4));
                 provodka.setStatus(Status.valueOf(rs.getString(5)));
 
+                provodkas.add(provodka);
             }
             return provodkas;
     }
