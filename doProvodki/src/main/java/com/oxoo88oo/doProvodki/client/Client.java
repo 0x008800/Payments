@@ -48,7 +48,7 @@ public abstract class Client<E extends Entity> implements IClient<E> {
     headers.setContentType(MediaType.APPLICATION_JSON);
 
     HttpEntity<E> entity = new HttpEntity<E>(toBeSent);
-    restTemplate.postForObject(BaseURL + getEntityName() + "insert", entity, type.getClass());
+    restTemplate.postForObject(BaseURL + getEntityName() + "insert", entity, type);// todo
 
     return true;
   }
